@@ -11,15 +11,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cinzel:wght@400;700&family=Marcellus&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --gold: #c8aa6e;
+            --gold-light: #f0e6d2;
+            --bg-dark: #010206;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #010206; 
+            background-color: var(--bg-dark); 
             font-family: 'Marcellus', serif;
             touch-action: none;
+            -webkit-tap-highlight-color: transparent;
         }
         
         canvas {
@@ -54,6 +61,8 @@
             opacity: 0;
             animation: pulseGlow 3s infinite ease-in-out;
             z-index: 20;
+            padding: 0 15px;
+            box-sizing: border-box;
         }
 
         @keyframes pulseGlow {
@@ -72,6 +81,12 @@
             gap: 12px;
             opacity: 0;
             pointer-events: all;
+        }
+
+        #volume-slider {
+            width: 100px;
+            accent-color: var(--gold);
+            cursor: pointer;
         }
 
         .ui-active {
@@ -112,6 +127,8 @@
             text-align: center;
             flex-direction: column;
             overflow: hidden;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         #overlay-particles {
@@ -124,7 +141,7 @@
         .hextech-button {
             position: relative;
             background: #1e2328;
-            border: 1px solid #c8aa6e;
+            border: 1px solid var(--gold);
             padding: 20px 70px;
             color: #cdbe91;
             font-family: 'Cinzel', serif;
@@ -140,9 +157,9 @@
         }
 
         .hextech-button:hover {
-            color: #f0e6d2;
+            color: var(--gold-light);
             background: #2a2f36;
-            border-color: #f0e6d2;
+            border-color: var(--gold-light);
             outline-color: rgba(240, 230, 210, 0.6);
             box-shadow: inset 0 0 25px rgba(200, 170, 110, 0.2), 0 0 40px rgba(200, 170, 110, 0.3);
             transform: scale(1.03);
@@ -152,11 +169,10 @@
             transform: scale(0.97);
         }
 
-        /* Esquinas del botón */
         .corner-decoration div {
             position: absolute;
             width: 18px; height: 18px;
-            border: 2px solid #c8aa6e;
+            border: 2px solid var(--gold);
             transition: all 0.3s;
         }
         .tl { top: -10px; left: -10px; border-right: none; border-bottom: none; }
@@ -165,15 +181,27 @@
         .br { bottom: -10px; right: -10px; border-left: none; border-top: none; }
 
         .start-title {
-            color: #f0e6d2;
+            color: var(--gold-light);
             font-family: 'Cinzel', serif;
-            font-size: 18px;
+            font-size: clamp(14px, 4vw, 18px); /* Responsivo */
             letter-spacing: 6px;
             margin-bottom: 50px;
             text-transform: uppercase;
             opacity: 0;
             animation: fadeInTitle 2.5s ease forwards;
             text-shadow: 0 0 15px rgba(200, 170, 110, 0.4);
+            z-index: 2;
+        }
+
+        .start-disclaimer {
+            margin-top: 35px; 
+            color: #465c6b; 
+            font-size: clamp(9px, 3vw, 11px); 
+            letter-spacing: 3px; 
+            font-family: 'Marcellus'; 
+            text-transform: uppercase; 
+            opacity: 0.6;
+            z-index: 2;
         }
 
         @keyframes fadeInTitle { 
@@ -189,7 +217,7 @@
             text-align: center;
             color: #FFDF00; 
             font-family: 'Caveat', cursive; 
-            font-size: 52px; 
+            font-size: clamp(28px, 8vw, 52px); /* Escala suave en móvil */
             font-weight: 700;
             text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 215, 0, 0.4);
             pointer-events: none; 
@@ -197,6 +225,7 @@
             opacity: 0;
             transform: translate(-50%, 0) rotate(-1deg) scale(0.9);
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            line-height: 1.1;
         }
 
         #lyrics-display.visible {
@@ -218,20 +247,39 @@
             transform: translate(-50%, -50%);
             color: rgba(200, 170, 110, 0.4);
             font-family: 'Cinzel';
-            font-size: 11px;
+            font-size: clamp(10px, 3vw, 12px);
             letter-spacing: 3px;
             pointer-events: none;
             text-transform: uppercase;
             opacity: 0;
             transition: opacity 2s;
             z-index: 5;
+            text-align: center;
+            width: 100%;
         }
 
+        /* Optimizaciones para Celular */
         @media (max-width: 768px) {
-            #lyrics-display { font-size: 38px; top: 12%; }
-            #ui-layer { font-size: 11px; bottom: 25px; letter-spacing: 3px; }
-            .hextech-button { font-size: 20px; padding: 18px 45px; letter-spacing: 3px; }
-            .start-title { font-size: 14px; letter-spacing: 4px; padding: 0 20px; line-height: 1.5; }
+            #lyrics-display { 
+                top: 12%; 
+            }
+            #ui-layer { 
+                bottom: 20px; 
+                letter-spacing: 2px; 
+            }
+            #controls-container {
+                bottom: 60px; /* Sube un poco para no chocar con el texto */
+                right: 15px;
+                gap: 8px;
+            }
+            #volume-slider {
+                width: 70px; /* Control más pequeño en móvil */
+            }
+            .hextech-button { 
+                padding: 15px 35px; 
+                letter-spacing: 3px; 
+                font-size: 18px;
+            }
         }
     </style>
 </head>
@@ -255,16 +303,16 @@
                 <div class="bl"></div><div class="br"></div>
             </div>
         </button>
-        <p style="margin-top: 35px; color: #465c6b; font-size: 11px; letter-spacing: 3px; font-family: 'Marcellus'; text-transform: uppercase; opacity: 0.6;">Asegúrate de activar el volumen</p>
+        <p class="start-disclaimer">Asegúrate de activar el volumen</p>
     </div>
     
     <div id="lyrics-display"></div>
     <div id="ui-layer">Para mi gemita bonita. Te quiere Lobito</div>
 
     <div id="controls-container">
-        <button id="audio-controls" style="background:none; border:none; cursor:pointer; padding:0;">
-            <svg id="icon-play" style="fill: #c8aa6e; width: 28px;" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            <svg id="icon-pause" style="fill: #c8aa6e; width: 28px; display: none;" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        <button id="audio-controls" style="background:none; border:none; cursor:pointer; padding:0; -webkit-tap-highlight-color: transparent;">
+            <svg id="icon-play" style="fill: #c8aa6e; width: 32px;" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="icon-pause" style="fill: #c8aa6e; width: 32px; display: none;" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
         <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" aria-label="Volume">
     </div>
@@ -522,7 +570,9 @@
             reiniciar(spawnInScreen = false) {
                 this.x = Math.random() * width;
                 this.y = spawnInScreen ? Math.random() * height : -50;
-                this.size = 5 + Math.random() * 7;
+                // Petalos más pequeños en móvil
+                let baseScale = width < 768 ? 0.6 : 1;
+                this.size = (5 + Math.random() * 7) * baseScale;
                 this.rot = Math.random() * Math.PI * 2;
                 this.vRot = (Math.random() - 0.5) * 0.06;
                 this.vY = 0.7 + Math.random() * 1.2;
@@ -612,7 +662,16 @@
                 this.xBase = x;
                 this.yBase = window.innerHeight + 80;
                 this.yFlor = window.innerHeight * (0.45 + Math.random() * 0.15);
-                this.escala = (isCentral ? 1.25 : 0.9) + Math.random() * 0.2;
+                
+                // --- ARREGLO PRINCIPAL PARA RESPONSIVE ---
+                // Calculamos un modificador global basado en el ancho de la pantalla
+                // Si es un celular de 400px, el globalScale será aprox 0.5
+                let globalScale = Math.min(1, window.innerWidth / 800);
+                // Evitamos que se hagan microscópicas en pantallas muy chicas
+                if (globalScale < 0.45) globalScale = 0.45; 
+                
+                this.escala = ((isCentral ? 1.25 : 0.9) + Math.random() * 0.2) * globalScale;
+                
                 this.indice = i;
                 this.isCentral = isCentral;
                 this.retraso = (i * 0.3);
@@ -638,7 +697,11 @@
 
                 ctx.beginPath();
                 ctx.moveTo(this.xBase, this.yBase);
-                ctx.bezierCurveTo(this.xBase, this.curY + 220, this.curX, this.curY + 130, this.curX, this.curY);
+                // Curvas dinámicas adaptadas al escalado para que no se deforme el tallo
+                let curva1 = 220 * this.escala;
+                let curva2 = 130 * this.escala;
+                ctx.bezierCurveTo(this.xBase, this.curY + curva1, this.curX, this.curY + curva2, this.curX, this.curY);
+                
                 let gt = ctx.createLinearGradient(this.xBase, this.yBase, this.curX, this.curY);
                 gt.addColorStop(0, "#010306"); gt.addColorStop(1, "#1c4a34");
                 ctx.strokeStyle = gt;
@@ -652,13 +715,14 @@
                     
                     ctx.globalCompositeOperation = 'screen';
                     let glowCol = lerpColor("rgba(255,210,0,0.18)", "rgba(255,0,0,0.18)", colorTransition);
-                    let glowRadius = 175 * this.escala * breathing;
+                    let glowRadius = 175 * this.escala * breathing; // Brillo adaptado
                     let glow = ctx.createRadialGradient(0,0,0,0,0,glowRadius);
                     glow.addColorStop(0, glowCol); glow.addColorStop(1, 'rgba(0,0,0,0)');
                     ctx.fillStyle = glow;
                     ctx.beginPath(); ctx.arc(0,0,glowRadius,0,Math.PI*2); ctx.fill();
                     ctx.globalCompositeOperation = 'source-over';
 
+                    // El escalado del canvas aplica para todos los pétalos
                     ctx.scale(this.escala * pFlor * breathing, this.escala * pFlor * breathing);
                     ctx.rotate(Math.sin(t * 0.0004 + this.indice) * 0.05 + this.tiltOffset + vientoActual * 0.1);
 
@@ -677,7 +741,7 @@
                         }
                     });
 
-                    let rad = 48;
+                    let rad = 48; // Centro relativo a la escala (ya lo afectó ctx.scale)
                     ctx.beginPath(); ctx.arc(0,0,rad,0,Math.PI*2);
                     let gc = ctx.createRadialGradient(0,0,0,0,0,rad);
                     gc.addColorStop(0, "#000"); gc.addColorStop(0.6, "#0c0600"); gc.addColorStop(1, "#4d3a00");
@@ -755,6 +819,7 @@
             flores.forEach(f => {
                 if (f.isCentral) {
                     let dx = ex - f.curX, dy = ey - f.curY;
+                    // Caja de hit escalada apropiadamente
                     if (Math.sqrt(dx*dx + dy*dy) < 130 * f.escala) {
                         trueLoveMode = !trueLoveMode;
                         for(let i=0; i<35; i++) {
@@ -773,7 +838,7 @@
         window.addEventListener('mousedown', (e) => handleInteraction(e.clientX, e.clientY));
         window.addEventListener('touchstart', (e) => {
             if(e.touches.length > 0) handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
-        });
+        }, { passive: false });
         window.addEventListener('mousemove', (e) => {
             targetViento = (e.clientX/width - 0.5)*2;
             if(animacionIniciada) magicTrail.push(new Sparkle(e.clientX, e.clientY));
@@ -783,7 +848,7 @@
                 targetViento = (e.touches[0].clientX/width - 0.5)*2;
                 handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
             }
-        });
+        }, { passive: true });
 
         function animar(t) {
             if (!animacionIniciada) return;
@@ -806,7 +871,8 @@
                     floorGlow.addColorStop(0, glowC);
                     floorGlow.addColorStop(1, "rgba(0,0,0,0)");
                     ctx.fillStyle = floorGlow;
-                    ctx.fillRect(f.curX - 150, height - 100, 300, 100);
+                    // Caja del brillo adaptada a la escala de la flor
+                    ctx.fillRect(f.curX - 150 * f.escala, height - 150 * f.escala, 300 * f.escala, 150 * f.escala);
                     ctx.restore();
                 }
             });
